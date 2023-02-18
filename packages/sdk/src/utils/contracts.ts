@@ -1,4 +1,7 @@
-import { getContractInterface, predeploys } from '@eth-optimism/contracts'
+import {
+  getContractInterface,
+  predeploys,
+} from '@eth-optimism/contracts'
 import { ethers, Contract } from 'ethers'
 
 import { toAddress } from './coercion'
@@ -320,19 +323,29 @@ export const getAllOEContracts = (
   // Attach all L1 contracts.
   const l1Contracts: OEL1Contracts = {} as any
   for (const [contractName, contractAddress] of Object.entries(addresses.l1)) {
-    l1Contracts[contractName] = getOEContract(contractName as any, l1ChainId, {
-      address: opts.overrides?.l1?.[contractName] || contractAddress,
-      signerOrProvider: opts.l1SignerOrProvider,
-    })
+    try {
+      l1Contracts[contractName] = getOEContract(contractName as any, l1ChainId, {
+        address: opts.overrides?.l1?.[contractName] || contractAddress,
+        signerOrProvider: opts.l1SignerOrProvider,
+      })
+    } catch (err) {
+      // Ignore any contracts we can't load, probably because ABI doesn't exist on original Optimism
+      // repo
+    }
   }
 
   // Attach all L2 contracts.
   const l2Contracts: OEL2Contracts = {} as any
   for (const [contractName, contractAddress] of Object.entries(addresses.l2)) {
-    l2Contracts[contractName] = getOEContract(contractName as any, l1ChainId, {
-      address: opts.overrides?.l2?.[contractName] || contractAddress,
-      signerOrProvider: opts.l2SignerOrProvider,
-    })
+    try {
+      l2Contracts[contractName] = getOEContract(contractName as any, l1ChainId, {
+        address: opts.overrides?.l2?.[contractName] || contractAddress,
+        signerOrProvider: opts.l2SignerOrProvider,
+      })
+    } catch (err) {
+      // Ignore any contracts we can't load, probably because ABI doesn't exist on original Optimism
+      // repo
+    }
   }
 
   return {
