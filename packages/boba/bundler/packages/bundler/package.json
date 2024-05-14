@@ -34,7 +34,7 @@
     "cors": "^2.8.5",
     "ethers": "^5.5.4",
     "express": "^4.18.1",
-    "hardhat-gas-reporter": "^1.0.8",
+    "hardhat-gas-reporter": "^2.0.0",
     "ow": "^0.28.1",
     "source-map-support": "^0.5.21"
   },
